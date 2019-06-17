@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body > div {
+            float: left;
+        }
+
+        .box, .bigImg {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            border: 1px solid #555555;
+        }
+
+        .img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .shadow {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 175px;
+            height: 175px;
+            background-color: #FEDE4F;
+            opacity: .5;
+            filter: alpha(opacity=50);
+            cursor: move;
+        }
+
+        .bigImg {
+            display: none;
+            margin-left: 10px;
+            overflow: hidden;
+        }
+
+        .bigImg img {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 200%;
+            height: 200%;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <img class="img" src="images/iphone.jpg"/>
+
+    <div class="shadow"></div>
+</div>
+<div class="bigImg">
+    <img src="images/iphone_big.jpg" alt=""/>
+</div>
+</body>
+<script src="jquery-1.11.3.min.js"></script>
+<script>
+    var $box = $('.box');
+    var $img = $box.find('.img');
+    var $shadow = $box.find('.shadow');
+    var $bigImg = $('.bigImg');
+    var $bigPhone = $bigImg.find('img');
+
+    $box.on('mouseover', function (e) {
+        $bigImg.css('display', 'block');
+        $shadow.css('display', 'block');
+    });
+    $box.on('mousemove', function (e) {
+        e = e || window.event;
+        e.pageX = e.pageX || e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
+        e.pageY = e.pageY || e.clientY + (document.documentElement.scrollTop || document.body.scrollTop);
+        var left = $(this).offset().left;
+        var top = $(this).offset().top;
+        this.left = e.pageX - left - $shadow.outerWidth() / 2;
+        this.top = e.pageY - top - $shadow.outerHeight() / 2;
+        var maxLeft = $(this).innerWidth() - $shadow.outerWidth();
+        var maxTop = $(this).innerHeight() - $shadow.outerHeight();
+        this.left = this.left < 0 ? 0 : this.left > maxLeft ? maxLeft : this.left;
+        this.top = this.top < 0 ? 0 : this.top > maxTop ? maxTop : this.top;
+        $shadow.css({left: this.left, top: this.top});
+
+        $bigPhone.css({left:-this.left*2,top:-this.top*2});
+
+    });
+    $box.on('mouseout', function () {
+        $bigImg.css('display', 'none');
+        $shadow.css('display', 'none');
+    })
+</script>
+</html>

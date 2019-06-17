@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .banner {
+            margin: 0 auto;
+            width: 790px;
+            height: 340px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        button {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin-top: -10px;
+            width: 40px;
+            height: 20px;
+            z-index: 2;
+        }
+
+        .right {
+            left: auto;
+            right: 0;
+        }
+
+        a {
+            display: inline-block;
+            width: 790px;
+            height: 340px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        a:nth-child(1) {
+            z-index: 1;
+            opacity: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        ul {
+            list-style: none;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            z-index: 2;
+        }
+
+        .clear:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+
+        li {
+            float: left;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            margin-left: 3px;
+            cursor: pointer;
+        }
+
+        li.selected {
+            background: red;
+        }
+
+        li:hover {
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div class="banner" id="banner">
+    <div class="bannerItem" id="bannerItem">
+        <a href="##"><img src="img/58524a43N6f8b9629.jpg" alt=""/></a>
+        <a href="##"><img src="img/58573002N246cd2ef.jpg" alt=""/></a>
+        <a href="##"><img src="img/585745e2Nb129391b.jpg" alt=""/></a>
+        <a href="##"><img src="img/585787c3N1057bd5d.jpg" alt=""/></a>
+    </div>
+    <button class="left"></button>
+    <button class="right"></button>
+    <ul class="clear" id="ul">
+        <li class="selected"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<script src="jquery-1.11.3.js"></script>
+<script>
+    function animate(ele, target, duration, callback) {
+        var time = 0;
+        var begin = {},
+                change = {};
+        for (var key in target) {
+            begin[key] = parseInt($(ele).css(key));
+            change[key] = target[key] - begin[key];
+        }
+        clearInterval(ele.timer);
+        ele.timer = setInterval(function () {
+            time += 10;
+            if (time >= duration) {
+                clearInterval(ele.timer);
+                $(ele).css(target);
+                typeof callback == 'function' ? callback.call(ele) : null;
+                return;
+            }
+            for (var key in change) {
+                if (change[key]) {
+                    var cur = begin[key] + change[key] / duration * time;
+                    $(ele).css(key, cur);
+                }
+            }
+        }, 10);
+    }
+    var step = 0;
+    var as = bannerItem.getElementsByTagName('a');
+    var timer = setInterval(fn, 2000);
+    function show() {
+        for (var i = 0; i < as.length; i++) {
+            if (step == i) {
+                $(as[i]).css('zIndex', 1);
+                animate(as[i], {'opacity': 1}, 500, function () {
+                    var brothers = $(this).siblings();
+                    for (var i = 0; i < brothers.length; i++) {
+                        $(brothers[i]).css('opacity', 0);
+
+                    }
+                })
+            } else {
+                $(as[i]).css('zIndex', 0);
+            }
+        }
+        focus();
+    }
+    function fn() {
+        step++;
+        if (step == 4) {
+            step = 0;
+        }
+        show();
+    }
+    banner.onmouseover = function () {
+        clearInterval(timer);
+    };
+    banner.onmouseout = function () {
+        timer = window.setInterval(fn, 2000);
+    };
+    banner.getElementsByClassName('right')[0].onclick = function () {
+        fn();
+    };
+    banner.getElementsByClassName('left')[0].onclick = function () {
+        if (step == 0) {
+            step = 4;
+        }
+        step--;
+        show();
+
+    };
+    var lis = ul.getElementsByTagName('li');
+    (function () {
+        for (var i = 0; i < lis.length; i++) {
+            var cur = lis[i];
+            cur.index = i;
+            cur.onclick = function () {
+                step = this.index;
+                show();
+            }
+        }
+
+    })();
+    function focus() {
+        var cur = step;
+        [].slice.call(lis).forEach(function (item, index) {
+            console.log(step, item);
+            index == step ? item.className = 'selected' : item.className = '';
+        })
+    }
+
+</script>
+</body>
+</html>

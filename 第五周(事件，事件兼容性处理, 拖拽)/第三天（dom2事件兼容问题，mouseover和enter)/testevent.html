@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background-color: #889933;
+        }
+    </style>
+</head>
+<body>
+<div id="div"></div>
+<script src="event.js"></script>
+<script>
+    on(div,'click',f1);
+    on(div,'click',f2);
+    off(div,'click',f2);
+
+    function f1(){
+        console.log(1);
+    }
+    function f2(){
+        console.log(2);
+    }
+</script>
+</body>
+</html>

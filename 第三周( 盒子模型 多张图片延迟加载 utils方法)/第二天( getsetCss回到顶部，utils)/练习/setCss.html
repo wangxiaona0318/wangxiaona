@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="div"></div>
+<script>
+    var div = document.getElementById('div');
+    function setCss(ele,attr,val){
+        debugger;
+        if(attr=='opacity'){
+            ele.style[attr]=val;
+            ele.style['filter']='alpha(opacity='+val*100+')';
+            return;
+        }
+        var reg = /width|height|top|bottom|left|right|(margin|padding)(Left|Top|Right|Bottom)?/;
+        if(reg.test(attr)){
+            val = val+"px";
+        }
+        ele.style[attr]=val;
+    }
+    setCss(div,'width',500);
+    console.log(window.getComputedStyle(div,null).width);
+</script>
+</body>
+</html>

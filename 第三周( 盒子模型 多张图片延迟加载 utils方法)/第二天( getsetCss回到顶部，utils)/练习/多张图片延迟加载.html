@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        div {
+            margin: 10px auto;
+            width: 450px;
+            height: 300px;
+        }
+        img{
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<!--
+<div>
+    <img src="1.jpg" real="" alt=""/>
+</div>
+-->
+
+<script>
+    var body = document.body;
+    var imgs = document.getElementsByTagName('img');
+    //获取数据
+    ;
+    (function () {
+        var xhr = new   XMLHttpRequest();
+        xhr.open('get','data.txt',false);
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4&&xhr.status==200){
+                window.data = JSON.parse(xhr.responseText);
+            }
+        }
+        xhr.send(null);
+    })();
+    //绑定数据
+   ;(function(){
+        var str=null;
+        for(var i=0;i<data.length;i++){
+            str+="<div>";
+            str+='<img src= "" real="'+data[i]['img']+'"/>';
+            str+="</div>";
+        }
+        body.innerHTML=str;
+    })();
+    function loadMoreImg(){
+        for(var i=0;i<imgs.length;i++){
+            var _a=windo('clientHeight')+windo('scrollTop');
+            var _b=imgs[i].parentNode.offsetHeight+offset(imgs[i].parentNode).top;
+            console.log(_a,_b);
+            if(_a>_b){
+                loadOneImg(imgs[i]);
+            }
+        }
+    }
+    loadMoreImg();
+    window.onscroll=loadMoreImg;
+    function loadOneImg(img){
+        if(img.loaded)return;
+        var imgtemp = document.createElement('img');
+        imgtemp.src = img.getAttribute('real');
+        imgtemp.onload=function(){
+            img.src=this.src;
+            fadeIn(img);
+        }
+        img.loaded=true;
+    }
+    function fadeIn(img){
+        var timer = window.setInterval(function(){
+            var opacityVal = parseFloat(window.getComputedStyle(img,null).opacity);
+            if(opacityVal==1){
+                window.clearInterval(timer);
+                return;
+            }
+            opacityVal+=0.01;
+            img.style.opacity=opacityVal;
+        },10);
+    }
+    function windo(attr,val){
+        if(val == undefined){
+            return document.documentElement[attr]||document.body[attr];
+        }else{
+            document.documentElement[attr]=val;
+            document.body[attr]=val;
+        }
+    }
+    function offset(ele){
+        var l = ele.offsetLeft;
+        var t = ele.offsetTop;
+        var par = ele.offsetParent;
+        while(par){
+            if(!/MSIE (6|7|8)/.test(window.navigator.userAgent)){
+                l+=par.clientLeft;
+                t+=par.clientTop;
+            }
+            l+=par.offsetLeft;
+            t+=par.offsetTop;
+            par=par.offsetParent;
+        }
+        return {left:l,top:t};
+    }
+</script>
+</body>
+</html>

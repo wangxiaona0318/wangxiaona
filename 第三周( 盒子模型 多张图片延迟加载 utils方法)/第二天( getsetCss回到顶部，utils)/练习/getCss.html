@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #ul {
+            width: 100px;
+            height: 100px;
+            color: #000;
+            opacity: 0.8; /*可以写，但是在ie6-8中不生效。还能获取*/
+            filter: alpha(opacity=30);
+        }
+    </style>
+</head>
+<body>
+<ul id="ul">
+
+</ul>
+<script>
+    var ul = document.getElementById('ul');
+    console.log(ul.style.width)
+    function getCss(ele, attr) {
+        var val = null;
+        if ('getComputedStyle' in window) {
+            val = window.getComputedStyle(ele)[attr];
+        } else {
+            if(attr=='opacity'){
+                val = ele.currentStyle.filter;
+                var reg = /alpha\(opacity=(\d+(?:\.\d+)?)\)/;//alpha(opacity=30.5)
+                val = reg.test(val)?reg.exec(val)[1]/100:1;
+            }else{
+                val = ele.currentStyle[attr];
+            }
+        }
+        if (/-?\d(\.\d+)?(em|rem|px|pt|deg)?/.test(val)) {
+            val = parseFloat(val);
+        }
+        return val;
+    }
+</script>
+</body>
+</html>

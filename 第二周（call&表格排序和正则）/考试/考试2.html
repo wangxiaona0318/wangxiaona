@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    var name = '中国'; // window.name = '珠峰';
+    var age = 5000; // window.age = 5000;
+    age = (function (name,age){ //给age重新赋值, 是一个自运行函数的返回结果。而自运行函数没有写return。所以默认返回undefined。并且把这个undefined的值。重新赋值给age了。索引age被修改成undefiend了
+        //形参： 私有变量  var name = '珠峰' age = 5000
+        name = '珠峰';
+        age = age || this.age;
+        this.name = arguments[0]; //'珠峰'
+        //window.name = '珠峰'
+        console.log(name,age);
+    })(name,age); // name? age?
+
+    console.log(name,age); //珠峰  ，undefined
+
+
+    //3
+    var obj = { name : 'zhufeng',age : 7 };
+    (function (obj){
+        // var obj = 外面那个对象的地址
+        // 全局的obj和私有的obj用同一个地址
+        // 只有引用数据类型才有共同引用的问题
+        obj.name = 'china'; // 对象的name属性被修改了china
+        obj = {}; // 赋值,尤其引用数据类型值赋值。 从现在正在开始使用的新的空对象的地址了
+        obj.age = 5000; // 新的空对象添加个5000
+        console.log(obj); //{age:5000}
+    })(obj)
+    // 形参赋值就是把obj所代表的内存地址复制给形参obj。
+    console.log(obj); // {name:china,age:7}
+
+
+    //4
+    //var i = 2; // 4 5 10 11 12 24 25
+    function fn(){
+        var i = 2;
+        return function (n){
+            console.log(n * ++i);
+        }
+    }
+    var f = fn(); // f占用fn()执行的返回值 f占用的是第一次执行的作用域
+    var f1 = fn(); // f1占用的是第二次执行的作用域
+    // fn每次执行都会返回一个函数，但是f占用的第一个，f1占用第二个
+    f(3); // 15
+    fn()(3); // 33
+    f(4); //48
+    f()(4); // 100
+
+
+
+
+
+</script>;

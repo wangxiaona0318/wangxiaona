@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .div{
+            margin: 0px auto;
+            width: 1366px;
+        }
+        #top{
+            position: fixed;
+            top: 530px;
+            left: 1290px;
+            width: 30px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: lawngreen;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+<div class="div">
+    <img src="jd.png" alt=""/>
+</div>
+<div id="top">top</div>
+<script>
+    var topss = document.getElementById('top');
+    topss.onclick=function(){
+        topss.style.display='none';
+        window.onscroll=null;
+        /*document.documentElement.scrollTop=0;
+        document.body.scrollTop=0;*/
+        var timer = window.setInterval(function(){
+            var scrollt = document.documentElement.scrollTop||document.body.scrollTop;
+            scrollt-=scrollt/30;
+            document.documentElement.scrollTop=scrollt;
+            document.body.scrollTop=scrollt;
+            if(scrollt<=0){
+                window.onscroll=scrollCase;
+                window.clearInterval(timer);
+                return;
+            }
+        },10);
+    }
+    var windClientHeight = document.documentElement.clientHeight||document.body.clientHeight;
+    window.onscroll=scrollCase;
+    function scrollCase(){
+        var scrollt = document.documentElement.scrollTop||document.body.scrollTop;
+        if(scrollt>windClientHeight){
+            topss.style.display='block';
+        }else{
+            topss.style.display='none';
+        }
+
+    }
+</script>
+</body>
+</html>
